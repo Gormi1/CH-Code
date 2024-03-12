@@ -1,0 +1,192 @@
+package Codigo;
+
+import java_cup.runtime.Symbol;
+
+/**
+ *
+ * @author Ramon Cheno y Jorge Cheno
+ */
+
+parser code
+{:
+    private Symbol s;
+
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+    }	
+:};
+
+terminal Suma, Resta, Multiplicacion, Division, Modulo, Potencia, Op_Logicos, 
+    Op_Asignacion, Op_Incremento, Asignacion, Op_Relacional, Valor_Booleano, Parentesis_a, 
+    Parentesis_c, Llave_a, Llave_c, Corchete_a, Corchete_c, Punto_coma, Coma, Dos_puntos, Punto,
+    Doble_comillas, Comilla_simple, Hacer, Mientras, Para, Si, Entc, Selec, Caso,
+    Predet, Romper, Publico, Clase, Estatico, Vacio, Ejecutar, Ent, Txt, Flt, Dob, Bol, Car, Valor_Decimal, 
+    Valor_Flotante, Identificador, Numero_Entero, Numero_Decimal, Igual, Caracter, Cadena, ERROR
+;
+
+non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_PARA, SI, ENTONCES, ENTONCES_SI, 
+    MIENTRAS, HACER_MIENTRAS, PARA, SENTENCIA_BOOLEANA, SENTENCIA_PARA, EJECUTAR, Tipo_Datos, Numero, 
+    SENTENCIA_LOGICA, SELECT_CASO, CASO
+;
+
+start with INICIO;
+
+INICIO ::= 
+    Publico Clase Identificador Corchete_a EJECUTAR Corchete_c |
+    Clase Identificador Corchete_a EJECUTAR Corchete_c
+;
+
+SENTENCIA ::= 
+    SENTENCIA DECLARACION |
+    DECLARACION |
+    SENTENCIA SI |
+    SI |
+    SENTENCIA ENTONCES |
+    ENTONCES |
+    SENTENCIA ENTONCES_SI |
+    ENTONCES_SI |
+    SENTENCIA MIENTRAS |
+    MIENTRAS |
+    SENTENCIA HACER_MIENTRAS |
+    HACER_MIENTRAS |
+    SENTENCIA PARA |
+    PARA | 
+    SENTENCIA EJECUTAR |
+    EJECUTAR |
+    SENTENCIA SELECT_CASO |
+    SELECT_CASO
+;
+
+DECLARACION ::=
+
+    Identificador Punto |
+    Identificador Asignacion Numero_Entero Punto |
+    Identificador Asignacion Numero_Decimal Valor_Flotante |
+    Identificador Asignacion Numero_Decimal Valor_Decimal |
+    Identificador Asignacion Cadena Punto |
+    Identificador Asignacion Caracter Punto |
+    Identificador Asignacion Valor_Booleano Punto
+    //Enteros
+    Ent Identificador Punto |
+    Ent Identificador Asignacion Numero_Entero Punto |
+    Ent Identificador Op_Incremento Punto |
+    Ent Op_Incremento Identificador Punto |
+    Ent Identificador Igual Numero_Entero |
+    Ent Identificador Op_Asignacion Numero_Entero Punto |
+    Ent Identificador Op_Asignacion Identificador Punto |
+    //Flotante
+    Flt Identificador Punto |
+    Flt Identificador Op_Incremento Punto |
+    Flt Op_Incremento Identificador Punto |
+    Flt Identificador Asignacion Numero_Decimal Valor_Flotante Punto |
+    Flt Identificador Igual Numero_Decimal Punto |
+    Flt Identificador Op_Asignacion Numero_Decimal Valor_Flotante Punto |
+    Flt Identificador Op_Asignacion Identificador Punto |
+    //Double
+    Dob Identificador Punto |
+    Dob Identificador Op_Incremento Punto |
+    Dob Op_Incremento Identificador Punto |
+    Dob Identificador Asignacion Numero_Decimal Valor_Decimal Punto |
+    Dob Identificador Igual Numero_Decimal Punto |
+    Dob Identificador Op_Asignacion Numero_Decimal Valor_Decimal Punto |
+    Dob Identificador Op_Asignacion Identificador Punto |
+    //Cadena
+    Txt Identificador Asignacion Doble_comillas Doble_comillas Punto |
+    Txt Identificador Asignacion Cadena Punto |
+    Txt Identificador Punto |
+    Txt Identificador Igual Cadena Punto |
+    Txt Identificador Igual Doble_comillas Doble_comillas Punto |
+    Txt Identificador Igual Identificador Punto |
+    //Caracter
+    Car Identificador Punto |
+    Car Identificador Asignacion Comilla_simple Comilla_simple Punto |
+    Car Identificador Asignacion Caracter Punto |
+    Car Identificador Igual Comilla_simple Comilla_simple Punto |
+    Car Identificador Igual Comilla_simple Caracter Comilla_simple Punto |
+    Car Identificador Igual Identificador Punto |
+    //Booleano
+    Bol Identificador Punto |
+    Bol Identificador Asignacion Valor_Booleano Punto |
+    Bol Identificador Igual Valor_Booleano Punto |
+    Bol Identificador Igual Identificador Punto   
+; 
+
+EJECUTAR ::= 
+    Publico Estatico Vacio Ejecutar Parentesis_a Parentesis_c 
+        Corchete_a SENTENCIA Corchete_c |
+    Estatico Vacio Ejecutar Parentesis_a Parentesis_c 
+        Corchete_a SENTENCIA Corchete_c
+;
+
+SI ::= 
+    Si Parentesis_a SENTENCIA_BOOLEANA Parentesis_c 
+        Corchete_a SENTENCIA Corchete_c |
+    Si Parentesis_a SENTENCIA_LOGICA Parentesis_c 
+        Corchete_a SENTENCIA Corchete_c
+;
+
+ENTONCES ::= 
+    Entc Corchete_a SENTENCIA Corchete_c
+;
+
+ENTONCES_SI ::= 
+    Entc SI
+;
+
+MIENTRAS ::= 
+    Mientras Parentesis_a SENTENCIA_BOOLEANA Parentesis_c 
+        Corchete_a SENTENCIA Corchete_c |
+    Mientras Parentesis_a SENTENCIA_LOGICA Parentesis_c 
+        Corchete_a SENTENCIA Corchete_c
+;
+
+HACER_MIENTRAS ::=
+    Hacer Corchete_a SENTENCIA Corchete_c Mientras Parentesis_a 
+        SENTENCIA_BOOLEANA Parentesis_c Punto |
+    Hacer Corchete_a SENTENCIA Corchete_c Mientras Parentesis_a 
+        SENTENCIA_LOGICA Parentesis_c Punto
+;
+
+PARA ::= 
+    Para Parentesis_a SENTENCIA_PARA Parentesis_c Corchete_a SENTENCIA Corchete_c
+;
+
+SENTENCIA_PARA ::= 
+    Tipo_Datos Identificador Asignacion Numero Punto SENTENCIA_BOOLEANA Punto DECLARACION_PARA |
+    Identificador Asignacion Numero Punto SENTENCIA_BOOLEANA Punto DECLARACION_PARA |
+    Tipo_Datos Identificador Asignacion Numero Punto SENTENCIA_BOOLEANA Op_Logicos SENTENCIA_BOOLEANA Punto DECLARACION_PARA |
+    Identificador Asignacion Numero Punto SENTENCIA_BOOLEANA Op_Logicos SENTENCIA_BOOLEANA Punto DECLARACION_PARA
+;
+
+DECLARACION_PARA ::= 
+    Identificador Op_Asignacion Numero |
+    Identificador Op_Incremento |
+    Op_Incremento Identificador 
+;
+
+Tipo_Datos ::= 
+    Ent | Txt | Flt | Dob
+;
+Numero ::= 
+    Numero_Entero | Numero_Decimal
+;
+
+SENTENCIA_BOOLEANA ::= 
+    Valor_Booleano |
+    Identificador Op_Relacional Valor_Booleano |
+    Identificador Op_Relacional Numero |
+    Identificador Op_Relacional Doble_comillas Doble_comillas |
+    Identificador Op_Relacional Cadena |
+    Identificador Op_Relacional Comilla_simple Comilla_simple |
+    Identificador Op_Relacional Caracter 
+;
+
+SENTENCIA_LOGICA ::= 
+    SENTENCIA_BOOLEANA Op_Logicos SENTENCIA_BOOLEANA
+;
+
+

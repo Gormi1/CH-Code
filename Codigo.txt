@@ -1,0 +1,21 @@
+publico clase prueba[
+	publico estatico vacio ejecutar()[
+		car respuesta = 's'.
+		hacer[
+			para(ent i = 0. i<<11. i++)[
+				si(respuesta == 's' Y i << 10)[
+					txt palabras = "hola".
+				]
+				entc si(respuestas == 't')[
+					txt palabra = "hola".
+					respuesta = 's'.
+				]
+				entc[
+					txt palabra = "adios".
+					respuesta = 'n'.
+				]				
+			]
+		
+		]mientras(respuesta == 'n').
+	]
+]
